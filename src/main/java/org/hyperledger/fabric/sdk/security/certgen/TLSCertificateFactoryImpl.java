@@ -48,7 +48,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 /****
  * Creates both client and server TLS certificates
  */
-public class TLSCertificateBuilder {
+public class TLSCertificateFactoryImpl implements TLSCertificateFactory {
     private static final SecureRandom rand = new SecureRandom();
     private static final String defaultSignatureAlgorithm = "SHA256withECDSA";
     private static final String defaultKeyType = "EC";
@@ -60,7 +60,7 @@ public class TLSCertificateBuilder {
     /***
      * Creates a TLSCertificateBuilder, which is used for creating certificates
      */
-    public TLSCertificateBuilder() {
+    public TLSCertificateFactoryImpl() {
         // Initialize a default random common name
         commonName = UUID.randomUUID().toString();
         // Initialize the signature algorithm to be ECDSA over SHA256 by default
@@ -69,10 +69,7 @@ public class TLSCertificateBuilder {
         keyType = defaultKeyType;
     }
 
-    /***
-     * Creates a TLS client certificate key pair
-     * @return a TLSCertificateKeyPair
-     */
+    @Override
     public TLSCertificateKeyPair clientCert() {
         try {
             return createCert(CertType.CLIENT, null);
@@ -81,11 +78,7 @@ public class TLSCertificateBuilder {
         }
     }
 
-    /***
-     * Creates a TLS server certificate key pair with the given DNS subject alternative name
-     * @param subjectAlternativeName the DNS SAN to be encoded in the certificate
-     * @return a TLSCertificateKeyPair
-     */
+    @Override
     public TLSCertificateKeyPair serverCert(String subjectAlternativeName) {
         try {
             return createCert(CertType.SERVER, subjectAlternativeName);
@@ -97,7 +90,7 @@ public class TLSCertificateBuilder {
     private TLSCertificateKeyPair createCert(CertType certType, String subjectAlternativeName) throws Exception {
         KeyPair keyPair = createKeyPair();
         X509Certificate cert = createSelfSignedCertificate(certType, keyPair, subjectAlternativeName);
-        return TLSCertificateKeyPair.fromX509CertKeyPair(cert, keyPair);
+        return TLSCertificateKeyPairImpl.fromX509CertKeyPair(cert, keyPair);
     }
 
     private X509Certificate createSelfSignedCertificate(CertType certType, KeyPair keyPair, String san) throws Exception {

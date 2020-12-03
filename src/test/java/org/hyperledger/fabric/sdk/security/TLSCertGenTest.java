@@ -42,7 +42,8 @@ import io.netty.handler.ssl.SslProvider;
 import org.hyperledger.fabric.protos.peer.EndorserGrpc;
 import org.hyperledger.fabric.protos.peer.ProposalPackage;
 import org.hyperledger.fabric.protos.peer.ProposalResponsePackage;
-import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateBuilder;
+import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateFactory;
+import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateFactoryImpl;
 import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateKeyPair;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -65,7 +66,7 @@ public class TLSCertGenTest {
     @Test
     public void selfSignedTLSCertTest() throws Exception {
         AtomicBoolean handshakeOccured = new AtomicBoolean(false);
-        TLSCertificateBuilder certBuilder = new TLSCertificateBuilder();
+        TLSCertificateFactory certBuilder = new TLSCertificateFactoryImpl();
 
         TLSCertificateKeyPair serverCert = certBuilder.serverCert("localhost");
         File serverCertFile = createFile("server-cert.pem", serverCert.getCertPEMBytes());
