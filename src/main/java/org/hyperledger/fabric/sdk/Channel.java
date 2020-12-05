@@ -108,7 +108,8 @@ import org.hyperledger.fabric.sdk.exception.TransactionException;
 import org.hyperledger.fabric.sdk.helper.Config;
 import org.hyperledger.fabric.sdk.helper.DiagnosticFileDumper;
 import org.hyperledger.fabric.sdk.helper.Utils;
-import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateBuilder;
+import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateFactory;
+import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateFactoryImpl;
 import org.hyperledger.fabric.sdk.security.certgen.TLSCertificateKeyPair;
 import org.hyperledger.fabric.sdk.transaction.GetConfigBlockBuilder;
 import org.hyperledger.fabric.sdk.transaction.InstallProposalBuilder;
@@ -664,8 +665,8 @@ public class Channel implements Serializable {
             final Properties properties = peer.getProperties();
             if ((properties == null) || properties.isEmpty() || (isNullOrEmpty(properties.getProperty("clientCertFile")) &&
                     !properties.containsKey("clientCertBytes"))) {
-                TLSCertificateBuilder tlsCertificateBuilder = new TLSCertificateBuilder();
-                TLSCertificateKeyPair tlsCertificateKeyPair = tlsCertificateBuilder.clientCert();
+                TLSCertificateFactory tlsCertificateFactory = new TLSCertificateFactoryImpl();
+                TLSCertificateKeyPair tlsCertificateKeyPair = tlsCertificateFactory.clientCert();
                 peer.setTLSCertificateKeyPair(tlsCertificateKeyPair);
             }
             discoveryEndpoints.add(peer.getEndpoint());
